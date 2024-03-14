@@ -21,8 +21,6 @@ public abstract class Karel extends Program {
         redirectException();
         File defaultWorld = new File("src/" + getClass().getPackageName().replace('.', '/') + "/worlds/" + getClass().getSimpleName() + ".w");
 
-        new KarelErrorDialog(this);
-
         world = new KarelWorld(defaultWorld);
         world.setBorder(new EmptyBorder(10, 10, 10, 10));
         world.safeWorld(getClass().getSimpleName() + ".w");
