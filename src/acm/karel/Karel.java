@@ -45,7 +45,7 @@ public abstract class Karel extends Program {
             @Override
             public void close() throws IOException {
                 super.close();
-                new KarelErrorDialog(Karel.this, buffer.toString(StandardCharsets.UTF_8.name()));
+                new KarelErrorDialog(Karel.this, buffer.toString(StandardCharsets.UTF_8));
                 buffer.reset();
             }
         };
