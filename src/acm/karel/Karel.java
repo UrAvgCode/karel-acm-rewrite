@@ -5,12 +5,9 @@ import acm.karel.components.KarelWorld;
 import acm.karel.controlls.KarelControls;
 import acm.program.Program;
 
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.io.File;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public abstract class Karel extends Program {
@@ -33,18 +30,32 @@ public abstract class Karel extends Program {
     }
 
     private void redirectException() {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         OutputStream out = new OutputStream() {
             @Override
             public void write(int b) {
+                buffer.write(b);
             }
 
             @Override
             public void write(byte[] b, int off, int len) {
-                new KarelErrorDialog(Karel.this, new String(b, off, len));
+                buffer.write(b, off, len);
+            }
+
+            @Override
+            public void close() throws IOException {
+                super.close();
+                new KarelErrorDialog(Karel.this, buffer.toString(StandardCharsets.UTF_8.name()));
+                buffer.reset();
             }
         };
         PrintStream printStream = new PrintStream(out, true, StandardCharsets.UTF_8);
-        System.setErr(printStream);
+
+        Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+            exception.printStackTrace(printStream);
+            printStream.close();
+            redirectException();
+        });
     }
 
     @Override
