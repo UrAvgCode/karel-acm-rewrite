@@ -5,6 +5,7 @@ import acm.karel.components.KarelWorld;
 import acm.karel.controlls.KarelControls;
 import acm.program.Program;
 
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
@@ -39,7 +40,7 @@ public abstract class Karel extends Program {
 
             @Override
             public void write(byte[] b, int off, int len) {
-                System.out.print(new String(b, off, len));
+                new KarelErrorDialog(Karel.this, new String(b, off, len));
             }
         };
         PrintStream printStream = new PrintStream(out, true, StandardCharsets.UTF_8);
